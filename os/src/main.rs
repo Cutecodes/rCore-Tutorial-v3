@@ -14,11 +14,13 @@
 #![feature(panic_info_message)]
 
 use core::arch::global_asm;
+use log::{debug,info,error,warn,trace};
 
 #[macro_use]
 mod console;
 mod lang_items;
 mod sbi;
+mod logger;
 
 #[cfg(feature = "board_qemu")]
 #[path = "boards/qemu.rs"]
@@ -51,6 +53,12 @@ pub fn rust_main() -> ! {
         fn boot_stack_top(); // stack top
     }
     clear_bss();
+    logger::init();
+    debug!("Hello, world!");
+    info!("Hello, world!");
+    warn!("Hello, world!");
+    error!("Hello, world!");
+    trace!("Hello, world!");
     println!("Hello, world!");
     println!(".text [{:#x}, {:#x})", stext as usize, etext as usize);
     println!(".rodata [{:#x}, {:#x})", srodata as usize, erodata as usize);
